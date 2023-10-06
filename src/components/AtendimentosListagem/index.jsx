@@ -13,6 +13,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import Atendimento from "../Atendimento";
 import ReactLoading from "react-loading";
+import PropTypes from 'prop-types';
 import "./styles.css"
 
 function acoesPaginacao(props) {
@@ -40,28 +41,28 @@ function acoesPaginacao(props) {
           <IconButton
             onClick={irParaPrimeiraPagina}
             disabled={page === 0}
-            aria-label="first page"
+            aria-label="primeira página"
           >
             {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
           </IconButton>
           <IconButton
-            onClick={irParaUltimaPagina}
+            onClick={irParaPaginaAnterior}
             disabled={page === 0}
-            aria-label="previous page"
+            aria-label="página anterior"
           >
             {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
           </IconButton>
           <IconButton
             onClick={irParaProximaPagina}
             disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-            aria-label="next page"
+            aria-label="next página"
           >
             {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
           </IconButton>
           <IconButton
-            onClick={irParaPaginaAnterior}
+            onClick={irParaUltimaPagina}
             disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-            aria-label="last page"
+            aria-label="última página"
           >
             {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
           </IconButton>
@@ -69,10 +70,17 @@ function acoesPaginacao(props) {
       );
 }
 
-export default function AtendimentosListagem({ token }) {
+acoesPaginacao.propTypes = {
+    count: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+}
+
+export default function AtendimentosListagem({ token, setToken }) {
     const [atendimentos, setAtendimentos] = useState([]);
     const [pagina, setPagina] = useState(0);
-    const [itensPorPagina, setItensPorPagina] = useState(20);
+    const [itensPorPagina, setItensPorPagina] = useState(10);
 
 
     useEffect(() => {
@@ -83,7 +91,6 @@ export default function AtendimentosListagem({ token }) {
                     "queryName": "DESAFIODEV"
                 })
 
-                console.log(res.data.result);
                 setAtendimentos(res.data.result);
             } catch (err) {
                 console.error("Erro ao buscar dados da API: ", err)
@@ -92,15 +99,18 @@ export default function AtendimentosListagem({ token }) {
         if (token) fetchAtendimentos();
     }, [token]);
 
+    const logout = (event) => {
+        event.preventDefault();
+        setToken(null);
+    }
     const mudarPagina = (event, novaPagina) => {
-        console.log(novaPagina)
+        event.preventDefault();
         setPagina(novaPagina);
     };
 
     const mudarItensPorPagina = (event) => {
-        console.log(event.target.value)
+        event.preventDefault();
         setItensPorPagina(event.target.value);
-        console.log(itensPorPagina)
         setPagina(0);
     };
 
@@ -111,15 +121,22 @@ export default function AtendimentosListagem({ token }) {
                     ?
                     (
                         <div className="data-display">
+                            <div>
+                            <button className="btn btn-danger" onClick={(e) => logout(e)}>
+                                Sair
+                            </button>
+                            </div>
                             <TableContainer>
                                 <Table>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell />
-                                            <TableCell sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '1rem' }} align="center">Atividade</TableCell>
-                                            <TableCell sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '1rem' }} align="center">Usuário</TableCell>
-                                            <TableCell sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '1rem' }} align="center">Contrato</TableCell>
-                                            <TableCell sx={{ color: '#FFF', fontWeight: 'bold', fontSize: '1rem' }} align="center">Situação</TableCell>
+                                            <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }} align="left">Atividade</TableCell>
+                                            <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }} align="center">Usuário</TableCell>
+                                            <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }} align="center">Contrato</TableCell>
+                                            <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }} align="center">Situação</TableCell>
+                                            <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }} align="center">Data de Solicitação</TableCell>
+                                            <TableCell sx={{ fontWeight: 'bold', fontSize: '1rem' }} align="center">Nota</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -136,9 +153,9 @@ export default function AtendimentosListagem({ token }) {
                                     <TableFooter>
                                         <TableRow>
                                             <TablePagination
-                                                sx={{ color: '#FFF', alignSelf: 'center'}}
-                                                rowsPerPageOptions={[20, 30, 40, 50, { label: 'All', value: -1 }]}
-                                                colSpan={3}
+                                                sx={{ alignSelf: 'center' }}
+                                                rowsPerPageOptions={[10, 20, 30, 40, 50, { label: 'Mostrar Tudo', value: -1 }]}
+                                                colSpan={8}
                                                 count={atendimentos.length}
                                                 rowsPerPage={itensPorPagina}
                                                 page={pagina}
@@ -155,7 +172,7 @@ export default function AtendimentosListagem({ token }) {
                     :
                     (
                         <div className="loading">
-                            <ReactLoading type="spin" color="#FFF" height={'40%'} width={'40%'} />
+                            <ReactLoading type="spin" color="#009EA9" height={'10%'} width={'10%'} />
                             <p>Aguarde enquanto os dados são carregados...</p>
                         </div>
                     )
