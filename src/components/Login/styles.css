@@ -1,0 +1,42 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 2rem;
+    background-color: #1A1A1A;
+    border-radius: 1rem;
+}
+
+h2 {
+    margin: 0;
+}
+
+input {
+    width: 200px;
+    height: 20px;
+    border-radius: .5rem;
+    padding: .5rem;
+    margin: .5rem;
+}
+
+button {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #242424;
+    cursor: pointer;
+    transition: border-color 0.25s;
+    margin-top: 1em;
+}
+button:hover {
+    border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
