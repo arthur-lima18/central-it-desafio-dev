@@ -1,0 +1,20 @@
+.data-display {
+    display: flex;
+    flex-direction: column;
+
+    padding: 2rem;
+    background-color: #1A1A1A;
+    border-radius: 1rem;
+
+    color: #fff;
+
+    min-width: 80%;
+}
+
+.loading {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+}

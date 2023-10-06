@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import Login from './components/Login';
-import AtividadesListagem from './components/AtividadesListagem';
+import AtendimentosListagem from './components/AtendimentosListagem';
 import "./App.css"
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
         ? 
           (<Login setToken={setToken} />)
         :
-          (<AtividadesListagem token={token}/>)
+          (<AtendimentosListagem token={token}/>)
       }
     </div>
   )
